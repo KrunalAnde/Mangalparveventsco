@@ -1,0 +1,228 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role-based access control.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 120 },
+        "email": { "type": "string", "maxLength": 160 },
+        "role": { "type": "string", "enum": ["super_admin"] },
+        "mobile": { "type": "string", "maxLength": 20 },
+        "status": { "type": "string", "enum": ["active", "suspended"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "role", "status"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Client profile seeking event management.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 120 },
+        "mobile": { "type": "string", "maxLength": 20 },
+        "email": { "type": "string", "maxLength": 160 },
+        "address": { "type": "string", "maxLength": 256 },
+        "source": { "type": "string", "maxLength": 80 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "mobile"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "Event booking and lifecycle orchestration record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "customerId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 120 },
+        "title": { "type": "string", "maxLength": 160 },
+        "eventType": { "type": "string", "maxLength": 80 },
+        "eventDateStart": { "type": "string", "maxLength": 30 },
+        "eventDateEnd": { "type": "string", "maxLength": 30 },
+        "venueAddress": { "type": "string", "maxLength": 256 },
+        "guestCount": { "type": "number" },
+        "budgetMin": { "type": "number" },
+        "budgetMax": { "type": "number" },
+        "status": { "type": "string", "enum": ["Draft", "Requirement Pending", "Costing", "Quoted", "Negotiating", "Confirmed", "Booking Confirmed", "In Execution", "Completed", "Cancelled"] },
+        "salesOwnerId": { "type": "string", "maxLength": 128 },
+        "coordinatorId": { "type": "string", "maxLength": 128 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "customerId", "title", "eventType", "eventDateStart", "status"]
+    },
+    "Vendor": {
+      "title": "Vendor",
+      "description": "Supplier or service provider profile with scorecards.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "businessName": { "type": "string", "maxLength": 160 },
+        "contactName": { "type": "string", "maxLength": 120 },
+        "mobile": { "type": "string", "maxLength": 20 },
+        "email": { "type": "string", "maxLength": 160 },
+        "address": { "type": "string", "maxLength": 256 },
+        "serviceArea": { "type": "string", "maxLength": 100 },
+        "rating": { "type": "number" },
+        "status": { "type": "string", "enum": ["Active", "Preferred", "Watchlist", "Suspended"] },
+        "qualityScore": { "type": "number" },
+        "reliabilityScore": { "type": "number" },
+        "baseCost": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 1000 }
+      },
+      "required": ["id", "businessName", "contactName", "mobile", "status"]
+    },
+    "Assignment": {
+      "title": "Assignment",
+      "description": "Assignment of a vendor to an event requirement.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "eventId": { "type": "string", "maxLength": 128 },
+        "vendorId": { "type": "string", "maxLength": 128 },
+        "vendorName": { "type": "string", "maxLength": 160 },
+        "serviceCategory": { "type": "string", "maxLength": 80 },
+        "quantity": { "type": "number" },
+        "agreedCost": { "type": "number" },
+        "customerPrice": { "type": "number" },
+        "selectionScore": { "type": "number" },
+        "status": { "type": "string", "enum": ["Proposed", "Availability Pending", "Offered", "Confirmed", "Rejected", "Completed"] },
+        "confirmedAt": { "type": "string" }
+      },
+      "required": ["id", "eventId", "vendorId", "status"]
+    },
+    "Quote": {
+      "title": "Quote",
+      "description": "Customer commercial quote with versioning.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "eventId": { "type": "string", "maxLength": 128 },
+        "quoteNumber": { "type": "string", "maxLength": 50 },
+        "version": { "type": "number" },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "tax": { "type": "number" },
+        "grandTotal": { "type": "number" },
+        "status": { "type": "string", "enum": ["Draft", "Sent", "Viewed", "Accepted", "Rejected", "Expired"] },
+        "terms": { "type": "string", "maxLength": 2000 },
+        "validUntil": { "type": "string", "maxLength": 30 }
+      },
+      "required": ["id", "eventId", "quoteNumber", "version", "grandTotal", "status"]
+    },
+    "Invoice": {
+      "title": "Invoice",
+      "description": "Invoice for event payments and billing.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "eventId": { "type": "string", "maxLength": 128 },
+        "invoiceNumber": { "type": "string", "maxLength": 50 },
+        "invoiceType": { "type": "string", "enum": ["Advance", "Milestone", "Final"] },
+        "issueDate": { "type": "string", "maxLength": 30 },
+        "dueDate": { "type": "string", "maxLength": 30 },
+        "total": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["Pending", "Partial", "Paid"] }
+      },
+      "required": ["id", "eventId", "invoiceNumber", "total", "status"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Ledger payment record for customer receivables or vendor payouts.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "eventId": { "type": "string", "maxLength": 128 },
+        "invoiceId": { "type": "string", "maxLength": 128 },
+        "payerType": { "type": "string", "enum": ["Customer", "Vendor Payout"] },
+        "paymentType": { "type": "string", "enum": ["Advance", "Milestone", "Final", "Security Deposit"] },
+        "amount": { "type": "number" },
+        "method": { "type": "string", "enum": ["UPI", "Bank Transfer", "Cash", "Card"] },
+        "transactionRef": { "type": "string", "maxLength": 100 },
+        "paidAt": { "type": "string" },
+        "status": { "type": "string", "enum": ["Success", "Pending", "Failed"] }
+      },
+      "required": ["id", "eventId", "amount", "method", "status"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Event execution task checklist item.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "eventId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 180 },
+        "status": { "type": "string", "enum": ["To Do", "In Progress", "Waiting", "Done"] },
+        "priority": { "type": "string", "enum": ["Low", "Medium", "High", "Urgent"] },
+        "ownerName": { "type": "string", "maxLength": 100 },
+        "dueAt": { "type": "string", "maxLength": 30 }
+      },
+      "required": ["id", "eventId", "title", "status"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Audit trail recording operational and financial modifications.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "actorName": { "type": "string", "maxLength": 100 },
+        "entityType": { "type": "string", "maxLength": 60 },
+        "entityId": { "type": "string", "maxLength": 128 },
+        "action": { "type": "string", "maxLength": 100 },
+        "details": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "actorName", "entityType", "action", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles and RBAC assignment"
+    },
+    "/customers/{customerId}": {
+      "schema": { "$ref": "#/entities/Customer" },
+      "description": "Directory of customers and clients"
+    },
+    "/events/{eventId}": {
+      "schema": { "$ref": "#/entities/Event" },
+      "description": "Central event files and booking specifications"
+    },
+    "/vendors/{vendorId}": {
+      "schema": { "$ref": "#/entities/Vendor" },
+      "description": "Vendors, capabilities, and performance profiles"
+    },
+    "/assignments/{assignmentId}": {
+      "schema": { "$ref": "#/entities/Assignment" },
+      "description": "Vendor assignments and double-booking control"
+    },
+    "/quotes/{quoteId}": {
+      "schema": { "$ref": "#/entities/Quote" },
+      "description": "Commercial customer quotations and revisions"
+    },
+    "/invoices/{invoiceId}": {
+      "schema": { "$ref": "#/entities/Invoice" },
+      "description": "Customer invoices for billing and advances"
+    },
+    "/payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/Payment" },
+      "description": "Payment receipts and transaction records"
+    },
+    "/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/Task" },
+      "description": "Execution board tasks and milestones"
+    },
+    "/audit_logs/{auditId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "System-wide immutable audit logs"
+    }
+  }
+}
