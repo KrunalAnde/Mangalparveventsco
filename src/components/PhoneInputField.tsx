@@ -35,7 +35,7 @@ export const PhoneInputField: React.FC<PhoneInputFieldProps> = ({
 
     let formatted = '';
     if (cleanDigits.length === 0) {
-      formatted = '';
+      formatted = '+91 ';
     } else if (cleanDigits.length <= 5) {
       formatted = `+91 ${cleanDigits}`;
     } else {

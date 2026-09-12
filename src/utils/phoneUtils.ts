@@ -52,7 +52,13 @@ export function formatToIndianMobile(input: string | undefined | null): string {
  */
 export function extractNationalDigits(input: string | undefined | null): string {
   if (!input) return '';
-  const digits = input.replace(/\D/g, '');
+  const trimmed = input.trim();
+  
+  if (trimmed.startsWith('+91')) {
+    return trimmed.slice(3).replace(/\D/g, '').slice(0, 10);
+  }
+
+  const digits = trimmed.replace(/\D/g, '');
 
   if (digits.startsWith('91') && digits.length === 12) {
     return digits.slice(2);
